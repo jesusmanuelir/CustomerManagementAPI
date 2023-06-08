@@ -54,10 +54,14 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => 'single',
             'ignore_exceptions' => false,
         ],
-
+        'request_response' => [
+            'driver' => 'single',
+            'path'   => storage_path('logs/request-response.log'),
+            'level' => env('APP_ENV') === 'production' ? 'info' : 'debug',
+        ],
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),
