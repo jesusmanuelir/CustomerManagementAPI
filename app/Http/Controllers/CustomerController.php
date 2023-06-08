@@ -131,13 +131,13 @@ class CustomerController extends Controller
 
             $customer->status = "trash";
 
-               if ($ustomer>save()) {
-                   return response()>json([
+               if ($customer->save()) { // Esta línea ha sido corregida
+                   return response()->json([
                        "success"=>true,
                        "message"=> "Cliente eliminado correctamente"
                    ],200);
             } else {
-                   return response()>json([
+                   return response()->json([
                       "success"=>false,
                       "message"=>"Error al eliminar al cliente"
                ],500);
@@ -146,8 +146,8 @@ class CustomerController extends Controller
 
            return response()->json([
                 "success" => false,
-                "message"=> "Error interno del servidor: {$e->getMessage()}"
-            ], 500);
+                "message"=> "{$e->getMessage()}"
+          ], 500);
 
        }
     }
