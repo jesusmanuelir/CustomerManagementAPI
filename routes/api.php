@@ -2,7 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Middleware\CheckToken;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\AuthController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,6 +16,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::post('login', [AuthController::class, 'login']);
+
+Route::middleware([CheckToken::class])->group(function () {
+    // a) Registrar customers (validar region/commune).
+    Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
+
+    // b) Consultar customers por DNI/email.
+    Route::get('/customers/search', [CustomerController::class, 'search'])->name('customers.search');
+
+    // c) Eliminar lógicamente customers (cambiar estado).
+    Route::patch('/customers/{customer}/soft-delete', [CustomerController::class, 'softDelete'])->name('customers.softDelete');
 });
+
+
+
+
+
+
+
