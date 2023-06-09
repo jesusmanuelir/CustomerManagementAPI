@@ -1,48 +1,72 @@
 # EasyCustomer API
 
-Este proyecto es un sistema RESTful simple desarrollado en Laravel para registrar clientes, realizar consultas y eliminar registros de manera suave.
+Este proyecto es un sistema RESTful simple desarrollado en Laravel para registrar clientes, realizar consultas y eliminar registros.
 
 ## Requisitos
 
+- Apache >= 2.4.56
 - PHP >= 8.1.17
-- Composer
-- Base de datos MySQL o compatible (ver configuración `.env`)
+- Composer >= 2.5.7
+- MariaDB >= 10.4.28
 
 ## Instalación
 
-1. Clonar este repositorio: `git clone https://github.com/jesusmanuelir/CustomerManagementAPI`
-2. Navegar al directorio del proyecto: `cd CustomerManagementAPI`
-3. Ejecutar `composer install` para instalar todas las dependencias
-4. Copiar el archivo `.env.example` a `.env`: `cp .env.example .env`
+1. Clonar este repositorio: 
+```sh 
+git clone https://github.com/jesusmanuelir/CustomerManagementAPI
+```
+2. Navegar al directorio del proyecto: 
+```sh 
+cd CustomerManagementAPI
+```
+3. Instalar todas las dependencias
+```sh
+composer install
+```
+4. Copiar el archivo `.env.example` a `.env`: 
+```sh 
+cp .env.example .env
+```
 5. Configurar la conexión a la base de datos y otros parámetros en el archivo `.env`
-6. En el archivo `.env` establecer el canal para los log y el tiempo de expiración del token de login  
-`LOG_CHANNEL=request_response`
-`TOKEN_EXPIRATION_MINUTES=15` En este caso son 15 minutos, por ejemplo si desea que sea una hora sería 60.
-`APP_DEBUG=false` Esto desactivará el registro detallado en producción, dejando solo registros básicos habilitados.
-7. Ejecutar migraciones y seeders: 
- `php artisan migrate`
- `php artisan db:seed --class=UsersTableSeeder` 
- `php artisan db:seed --class=ChileanTableSeeder`
+```sh 
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE={You DB NAME}
+DB_USERNAME={You DB USERNAME}
+DB_PASSWORD={You DB PASSWORD}
+```
+6. Ejecutar migraciones y seeders: 
+```sh 
+php artisan migrate
+```
+```sh
+ php artisan db:seed --class=UsersTableSeeder
+``` 
+```sh
+ php artisan db:seed --class=ChileanTableSeeder
+ ```
 
 ## Servicios Disponibles
 
 ### Autenticación
 
-**URL:** `/api/auth/login`
+*URL:* `/api/auth/login`
 
-**Método:** POST
+*Método:* POST
 
-**Parámetros:** email, password.
+*Parámetros:* email, password.
 
-**Descripción:** Retorna un token SHA1 único si se inicia sesión correctamente, especificando su tiempo de expiración. Utilice este token como Bearer Token en los encabezados Authorization para acceder a los demás servicios protegidos por autenticación.
+*Descripción:* Retorna un token SHA1 único si se inicia sesión correctamente, especificando su tiempo de expiración. Utilice este token como Bearer Token en los encabezados Authorization para acceder a los demás servicios protegidos por autenticación, dicho token tiene un tiempo de expiración 15 minutos, lo puede cambiar en el archivo `.env` en la variable de entorno `TOKEN_EXPIRATION_MINUTES=15`.
+Para ejecutar una prueba puede ver los emails de los usuarios de prueba registrados en la tabla `users`, todos tiene la misma clave `secret`.
 
 ### Registrar Clientes 
 
-**URL:** `/api/customers/create`
+*URL:* `/api/customers/create`
 
-**Método:** POST
+*Método:* POST
 
-**Parámetros:**
+*Parámetros:*
 - name (obligatorio)
 - last_name (obligatorio)
 - dni (obligatorio)
@@ -51,35 +75,48 @@ Este proyecto es un sistema RESTful simple desarrollado en Laravel para registra
 - region_id (obligatorio)
 - commune_id (obligatorio)
 
-**Validaciones:**
+*Validaciones:*
+- El token de autenticación es obligatorio.
 - Los campos obligatorios deben estar presentes.
 - La comuna y la región deben existir y estar relacionadas.
+- La comuna y la región deben tener status `A` (activo).
 
-**Descripción:** Registra nuevos clientes asociándolos con su comuna y región correspondiente.
+*Descripción:* Registra nuevos clientes asociándolos con su comuna y región correspondiente.
 
 ### Consultar Clientes
 
-**URL:** `/api/customers/search`
+*URL:* `/api/customers/search`
 
-**Método:** GET
+*Método:* GET
 
-**Parámetros:** dni o email (al menos uno de los dos es necesario).
+*Parámetros:* dni o email (al menos uno de los dos es necesario).
 
-**Validaciones:**
+*Validaciones:*
+- El token de autenticación es obligatorio.
+- El cliente debe tener status `A` (activo).
 - Al menos uno de los parámetros debe ser proporcionado.
 
-**Descripción:** Consulta un cliente por DNI o correo electrónico. Retorna información básica del cliente, junto con la descripción de su región y comuna.
+*Descripción:* Consulta un cliente por DNI o correo electrónico. Retorna información básica del cliente, junto con la descripción de su región y comuna.
 
 ### Eliminar lógicamente un Cliente
 
-**URL:** `/api/customers/delete/{dni}`
+*URL:* `/api/customers/delete/{dni}`
 
- **Método:** PATCH
+ *Método:* PATCH
 
- **Parámetro:** dni (en la URL)
+ *Parámetro:* dni (en la URL)
  
- **Validaciones:**
- 
- - El cliente debe existir y no tener estado "trash".
+ *Validaciones:*
+ - El token de autenticación es obligatorio.
+ - El cliente debe existir y no tener status `trash`.
 
-**Descripción:** Elimina lógicamente a un cliente del sistema cambiando su estado a "trash".
+*Descripción:* Elimina lógicamente a un cliente del sistema cambiando su estado a "trash".
+## Configuración .env
+En el archivo `.env` se realizó una configuración especial:
+- `LOG_CHANNEL=request_response` Depende del valor de la variable APP_ENV. Si está en producción (APP_ENV=production), solo registra eventos con nivel "info" o superior; si no está en producción, registra eventos a partir del nivel "debug".
+- `TOKEN_EXPIRATION_MINUTES=15` Su función es establecer el tiempo de expiración del token. En este caso son 15 minutos, por ejemplo si desea que sea una hora sería 60. 
+- `APP_DEBUG=false` Desactivará el registro detallado en producción, dejando solo registros básicos habilitados.
+
+## License
+
+MIT
