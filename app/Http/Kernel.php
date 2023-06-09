@@ -69,5 +69,8 @@ class Kernel extends HttpKernel
 
     protected $routeMiddleware = [
         'checkToken' => \App\Http\Middleware\CheckToken::class,
+        'validate.customer' => \App\Http\Middleware\ValidateCustomer::class,
+        'validate.search' => \App\Http\Middleware\ValidateSearch::class,
+        'validate.delete' => \App\Http\Middleware\ValidateDelete::class,
     ];
 }

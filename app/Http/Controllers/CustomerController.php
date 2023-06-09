@@ -5,26 +5,15 @@ use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
-use App\Rules\CommuneRegionRule;
 
 class CustomerController extends Controller
 {
     public function store(Request $request)
     {
         try {
-            $validatedData = $request->validate([
-                "dni" => ["required", "unique:customers,dni"],
-                "email" => ["required", "email", "unique:customers,email"],
-                "name" => ["required"],
-                "last_name" => ["required"],
-                "address" => ["nullable"],
-                "id_reg" => "required|exists:regions,id_reg",
-                "id_com" => ["required", new CommuneRegionRule()],
-            ]);
-
+            $validatedData = $request->all();
             $customer = new Customer($validatedData);
             $customer->date_reg = Carbon::now();
-
 
         if ($customer->save()) {
 
@@ -41,21 +30,13 @@ class CustomerController extends Controller
                 ],
             ], 201);
         }
-        } catch (ValidationException$e) {
-
+        } catch (\Exception$e) {
             return response()->json([
                 "success" => false,
-                "message"  => $e->validator->getMessageBag()
-            ], 422);
+                "message"=> "Error interno del servidor: {$e->getMessage()}"
+            ], 500);
 
-        }	catch(\Exception$e) {
-
-           return response()->json([
-            "success" => false,
-            "message"=> "Error interno del servidor: {$e->getMessage()}"
-        ], 500);
-
-       }
+        }
     }
 
     public function search(Request $request)
@@ -63,13 +44,6 @@ class CustomerController extends Controller
         try {
             $dni = $request->input("dni");
             $email = $request->input("email");
-
-            if (!$dni && !$email) {
-                return response()->json([
-                    "success" => false,
-                    "message" => "Debes proporcionar al menos uno de los siguientes parámetros: dni o correo"
-                ], 400);
-            }
 
             $customerQuery = Customer::query();
             $customerQuery->where("status", "=", "A");
@@ -83,7 +57,6 @@ class CustomerController extends Controller
                    $query->orWhere("email", "=", trim($email));
                 }
             });
-
 
                $customer = $customerQuery->first();
 
@@ -131,7 +104,7 @@ class CustomerController extends Controller
 
             $customer->status = "trash";
 
-               if ($customer->save()) { // Esta línea ha sido corregida
+               if ($customer->save()) {
                    return response()->json([
                        "success"=>true,
                        "message"=> "Cliente eliminado correctamente"

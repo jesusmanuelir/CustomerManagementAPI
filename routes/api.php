@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckToken;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\AuthController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,14 +21,12 @@ use App\Http\Controllers\AuthController;
 Route::post('login', [AuthController::class, 'login']);
 
 Route::middleware([CheckToken::class])->group(function () {
-    // a) Registrar customers (validar region/commune).
-    Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
 
-    // b) Consultar customers por DNI/email.
-    Route::get('/customers/search', [CustomerController::class, 'search'])->name('customers.search');
+    Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store')->middleware(['validate.customer']);
 
-    // c) Eliminar lógicamente customers (cambiar estado).
-    Route::patch('/customers/{customer}/soft-delete', [CustomerController::class, 'softDelete'])->name('customers.softDelete');
+    Route::get('/customers/search', [CustomerController::class, 'search'])->name('customers.search')->middleware(['validate.search']);
+
+    Route::patch('/customers/delete/{dni?}', [CustomerController::class, 'softDelete'])->name('customers.softDelete')->middleware('validate.delete');
 });
 
 
