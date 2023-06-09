@@ -18,11 +18,11 @@ use App\Http\Controllers\AuthController;
 */
 
 
-Route::post('login', [AuthController::class, 'login']);
+Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::middleware([CheckToken::class])->group(function () {
 
-    Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store')->middleware(['validate.customer']);
+    Route::post('/customers/create', [CustomerController::class, 'store'])->name('customers.store')->middleware(['validate.customer']);
 
     Route::get('/customers/search', [CustomerController::class, 'search'])->name('customers.search')->middleware(['validate.search']);
 
