@@ -72,8 +72,8 @@ Para ejecutar una prueba puede ver los emails de los usuarios de prueba registra
 - dni (obligatorio)
 - email (opcional)
 - address (opcional)
-- region_id (obligatorio)
-- commune_id (obligatorio)
+- id_reg (obligatorio)
+- id_com (obligatorio)
 
 *Validaciones:*
 - El token de autenticación es obligatorio.
