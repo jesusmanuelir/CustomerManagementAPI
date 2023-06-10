@@ -12,4 +12,9 @@ class Commune extends Model
     protected $table = 'communes';
     protected $primaryKey = 'id_com';
 
+    public function region()
+    {
+        return $this->belongsTo(Region::class, 'id_reg');
+    }
+
 }

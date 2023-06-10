@@ -57,7 +57,10 @@ php artisan migrate
 
 *Parámetros:* email, password.
 
-*Descripción:* Retorna un token SHA1 único si se inicia sesión correctamente, especificando su tiempo de expiración. Utilice este token como Bearer Token en los encabezados Authorization para acceder a los demás servicios protegidos por autenticación, dicho token tiene un tiempo de expiración 15 minutos, lo puede cambiar en el archivo `.env` en la variable de entorno `TOKEN_EXPIRATION_MINUTES=15`.
+*Descripción:* Retorna un token SHA1 único si se inicia sesión correctamente, especificando su tiempo de expiración. Utilice este token como Bearer Token en los encabezados Authorization para acceder a los demás servicios protegidos por autenticación.
+
+El token tiene un tiempo de expiración 15 minutos, lo puede cambiar en el archivo `.env` en la variable de entorno `TOKEN_EXPIRATION_MINUTES=15`.
+
 Para ejecutar una prueba puede ver los emails de los usuarios de prueba registrados en la tabla `users`, todos tiene la misma clave `secret`.
 
 ### Registrar Clientes 
@@ -70,7 +73,7 @@ Para ejecutar una prueba puede ver los emails de los usuarios de prueba registra
 - name (obligatorio)
 - last_name (obligatorio)
 - dni (obligatorio)
-- email (opcional)
+- email (obligatorio)
 - address (opcional)
 - id_reg (obligatorio)
 - id_com (obligatorio)
@@ -108,7 +111,7 @@ Para ejecutar una prueba puede ver los emails de los usuarios de prueba registra
  
  *Validaciones:*
  - El token de autenticación es obligatorio.
- - El cliente debe existir y no tener status `trash`.
+ - El cliente debe existir y tener status `A` (activo) o `I`(inactivo).
 
 *Descripción:* Elimina lógicamente a un cliente del sistema cambiando su estado a "trash".
 ## Configuración .env

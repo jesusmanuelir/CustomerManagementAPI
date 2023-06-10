@@ -8,15 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Token extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'user_id',
-        'value',
-        'expires_at'
-    ];
-
-    protected $dates = [
-        'expires_at'
-    ];
+    protected $fillable = ['user_id','value','expires_at'];
+    protected $dates = ['expires_at'];
 
     public function user()
     {

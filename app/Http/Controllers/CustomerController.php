@@ -72,11 +72,11 @@ class CustomerController extends Controller
             return response()->json([
               "success" => true,
               "data" => [
-                  "name" => ucfirst(strtolower(trim($customer->name))),
-                  "last_name"=>ucfirst(strtolower(trim($customer->last_name))),
-                  "address"=>ucfirst(strtolower(trim($customer->address))),
+                  "name" => $customer->name,
+                  "last_name"=> $customer->last_name,
+                  "address"=> $customer->address,
                   "region"=> optional($customer->region)->description,
-                  "commune"=>optional($customer->commune)->description
+                  "commune"=> optional($customer->commune)->description
                ],
            ],200);
 
@@ -84,7 +84,7 @@ class CustomerController extends Controller
 
              return response()->json([
                 "success" => false,
-                "message"=> "Error interno del servidor: {$e->getMessage()}"
+                "message" => "Error interno del servidor: {$e->getMessage()}"
             ], 500);
         }
     }

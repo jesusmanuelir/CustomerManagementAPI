@@ -33,7 +33,6 @@ class ValidateCustomer
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'message' => strval(implode(',', Arr::flatten($validator->errors()->toArray()))),
                 'errors'  => $validator->errors(),
             ], 422);
         }
