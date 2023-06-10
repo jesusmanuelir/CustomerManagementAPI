@@ -120,6 +120,22 @@ En el archivo `.env` se realizó una configuración especial:
 - `TOKEN_EXPIRATION_MINUTES=15` Su función es establecer el tiempo de expiración del token. En este caso son 15 minutos, por ejemplo si desea que sea una hora sería 60. 
 - `APP_DEBUG=false` Desactivará el registro detallado en producción, dejando solo registros básicos habilitados.
 
+## Pruebas de la API con Postman
+
+Para probar los servicios disponibles de la API, puedes utilizar [Postman](https://www.postman.com/). Una vez instalado e iniciado Postman, sigue estos pasos:
+
+1. Importa archivo `EasyCustomer API.postman_collection` (ubicado en la carpeta raiz) en tu Postman. Despues de importar debe reemplaza `{host_url}` en todas las peticiones por la dirección que estés utilizando, por ejemplo: http://127.0.0.1:8000.
+
+2. El primer request a ejecutar es `Login`. Para ello, ve a la opción 'Body' y proporciona el correo electrónico del usuario (puedes encontrarlo en la tabla `user`). La contraseña ya está indicada. Tras ejecutar esta petición, recibirás una respuesta que incluye un token para usar en los demás servicios.
+
+*Customer*
+Para crear un registro de clientes, selecciona el request llamado `Customer`. Agrega el token obtenido anteriormente en la opción de `Authorization`, específicamente bajo `Bearer Token`. Luego, completa todos los valores requeridos en la sección `Params`.
+
+*Search*
+Si deseas buscar clientes por DNI o correo electrónico, selecciona el request denominado `Search`. Agrega nuevamente el token como `Bearer Token` dentro de `Authorization` y rellena los campos necesarios en `Params`.
+
+*Delete*
+Para realizar una eliminación lógica del cliente, utiliza el request titulado `Delete`. Al igual que antes, agrega el token correspondiente como `Bearer Token` dentro de `Authorization` y reemplaza {dni} dentro de la URL por el DNI del cliente que deseas eliminar.
 ## License
 
 MIT

@@ -1,0 +1,171 @@
+{
+	"info": {
+		"_postman_id": "10284881-aba2-46e6-8cd4-9fa3bb53100c",
+		"name": "EasyCustomer API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "password",
+							"value": "secret",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "{host_url}/api/auth/login",
+					"host": [
+						"{host_url}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Customer",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{host_url}/api/customers/create?dni&name&last_name&email&address&id_reg&id_com",
+					"host": [
+						"{host_url}"
+					],
+					"path": [
+						"api",
+						"customers",
+						"create"
+					],
+					"query": [
+						{
+							"key": "dni",
+							"value": null
+						},
+						{
+							"key": "name",
+							"value": null
+						},
+						{
+							"key": "last_name",
+							"value": null
+						},
+						{
+							"key": "email",
+							"value": null
+						},
+						{
+							"key": "address",
+							"value": null
+						},
+						{
+							"key": "id_reg",
+							"value": null
+						},
+						{
+							"key": "id_com",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{host_url}/api/customers/search?dni=&email=",
+					"host": [
+						"{host_url}"
+					],
+					"path": [
+						"api",
+						"customers",
+						"search"
+					],
+					"query": [
+						{
+							"key": "dni",
+							"value": ""
+						},
+						{
+							"key": "email",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "{host_url}/api/customers/delete/{dni}",
+					"host": [
+						"{host_url}"
+					],
+					"path": [
+						"api",
+						"customers",
+						"delete",
+						"{dni}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
